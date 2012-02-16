@@ -1,0 +1,26 @@
+name: VoxelUpdate
+version: 1.0.14
+website: http://voxelwiki.com
+author: Psanker & Giltwist
+main: com.thevoxelbox.voxelupdate.VoxelUpdate
+commands:
+  voxelplugins:
+    description: List status of voxelplugins
+    usage: |
+           /<command>
+           Example: /<command> - need to write the help.
+  voxelinfo:
+    description: Gives a short description of the voxelplugins
+    usage: |
+           /<command>
+           Example: /<command> - need to write the help.
+  voxelupdate:
+    description: Updates the specified VoxelPlugin, if possible
+    usage: |
+           /<command> <plugin>
+           Example: /<command> - need to write the help.
+  voxelinstall:
+    description: Installs the specified VoxelPlugin, if possible
+    usage: |
+           /<command> <plugin>
+           Example: /<command> - need to write the help.

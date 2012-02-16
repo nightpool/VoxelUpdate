@@ -1,0 +1,20 @@
+[1.0.0a] - Initial tracked build - Giltwist
+[1.0.0b] - First crack at /listvoxelplugins - Giltwist
+[1.0.0c] - Testing stuff - Giltwist
+[1.0.0] - Deployed to main server
+[1.0.0c] - Testing stuff - Giltwist
+[1.0.1a] - Several commands now work - Giltwist & Psanker
+[1.0.2] - Added auto-update and onDisable() fixes - Psanker
+[1.0.2a] - fixed isInstalled - Giltwist
+[1.0.3] - Added some performance enhancements to data fetching - psanker
+[1.0.4] - Added automatic data fetching for updates (and a preference for it) - psanker
+[1.0.5] - Bugfix in search messenger - psanker
+[1.0.6] - Bugfixes - psanker
+[1.0.7] - Public release - psanker
+[1.0.8] - Added /voxelinfo, removed *all commands - Giltwist
+[1.0.9] - Made /voxelinfo do all plugins, instead of specified plugin - Giltwist
+[1.0.10] - Added a more comprehensible version checking system - psanker
+[1.0.11] - Bugfix in .properties generation (referred from a support ticket); returning after creating the file and going off of default configuration - psanker
+[1.0.12] - Changed runner to Sync schedule; calling writePreferences() ONLY when .properties doesn't exist
+[1.0.13] - Java6 -przerwap
+[1.0.14] - Maven'd and built with 1.1-R4

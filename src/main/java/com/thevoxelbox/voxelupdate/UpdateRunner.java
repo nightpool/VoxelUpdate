@@ -4,7 +4,8 @@
  */
 package com.thevoxelbox.voxelupdate;
 
-import java.util.TreeSet;
+import java.util.LinkedList;
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -15,7 +16,7 @@ import org.bukkit.plugin.Plugin;
  */
 public class UpdateRunner implements Runnable {
 
-    TreeSet<String> messaged = new TreeSet<String>();
+    List<String> messaged = new LinkedList<String>();
     
     @Override
     public void run() {

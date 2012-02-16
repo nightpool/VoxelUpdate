@@ -7,11 +7,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
-import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.ChatColor;
@@ -35,8 +35,8 @@ public class VoxelUpdate extends JavaPlugin {
     public static boolean searchForUpdates = true;
     public File preferences = new File("plugins/VoxelUpdate/VoxelUpdate.properties");
     public static final Logger log = Logger.getLogger("Minecraft");
-    public static TreeSet<String> admns = new TreeSet<String>();
-    public static UpdateManager um = new UpdateManager();
+    public static List<String> admns = new LinkedList<String>();
+    public static UpdateManager updateManager = new UpdateManager();
 
     @Override
     public void onDisable() {
@@ -92,7 +92,7 @@ public class VoxelUpdate extends JavaPlugin {
     public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
         Player p = (Player) sender;
         String[] trimmedArgs = args;
-        List<String> voxelplugins = um.getListofPlugins();
+        List<String> voxelplugins = updateManager.getListofPlugins();
 
         String comm = command.getName().toLowerCase();
         if (admns.contains(p.getName())) {
@@ -102,12 +102,12 @@ public class VoxelUpdate extends JavaPlugin {
 
                     //p.sendMessage("DEBUG: "+tempplugin); //DEBUG
                     boolean tempenabled = s.getPluginManager().isPluginEnabled(tempplugin);
-                    boolean tempinstalled = um.isInstalled(tempplugin);
+                    boolean tempinstalled = updateManager.isInstalled(tempplugin);
 
                     if (tempinstalled) {
                         if (tempenabled) {
 
-                            if (um.needsUpdate(tempplugin)) {
+                            if (updateManager.needsUpdate(tempplugin)) {
                                 p.sendMessage("* " + tempplugin + ": " + ChatColor.GOLD + "Update Available");
 
                             } else {
@@ -126,12 +126,12 @@ public class VoxelUpdate extends JavaPlugin {
                 if (args.length == 0) {
                     p.sendMessage(ChatColor.GOLD + "Use: /voxelinstall <plugin>");
                 } else { // Test case... Perhaps allow multiple plugins ("/voxelinstall plugin1 plugin2 pluginn")?
-                    if (!um.getListofPlugins().contains(trimmedArgs[0])) {
+                    if (!updateManager.getListofPlugins().contains(trimmedArgs[0])) {
                         p.sendMessage(ChatColor.RED + "Could not find plugin \"" + trimmedArgs[0] + "\"");
                         return true;
                     }
 
-                    if (um.doDownload(trimmedArgs[0])) {
+                    if (updateManager.doDownload(trimmedArgs[0])) {
                         p.sendMessage(ChatColor.WHITE + "[" + ChatColor.AQUA + "Voxel" + ChatColor.LIGHT_PURPLE + "Update" + ChatColor.WHITE + "] Successfully downloaded \"" + ChatColor.GREEN + trimmedArgs[0] + ChatColor.WHITE + "\"");
                     } else {
                         p.sendMessage(ChatColor.RED + "Download failed. See server logs for details.");
@@ -142,13 +142,13 @@ public class VoxelUpdate extends JavaPlugin {
                 if (args.length == 0) {
                     p.sendMessage(ChatColor.GOLD + "Use: /voxelupdate <plugin>");
                 } else {
-                    if (!um.getListofPlugins().contains(trimmedArgs[0])) {
+                    if (!updateManager.getListofPlugins().contains(trimmedArgs[0])) {
                         p.sendMessage(ChatColor.RED + "Could not find plugin \"" + trimmedArgs[0] + "\"");
                         return true;
                     }
 
-                    if (um.needsUpdate(trimmedArgs[0])) {
-                        if (um.doDownload(trimmedArgs[0])) {
+                    if (updateManager.needsUpdate(trimmedArgs[0])) {
+                        if (updateManager.doDownload(trimmedArgs[0])) {
                             p.sendMessage(ChatColor.WHITE + "[" + ChatColor.AQUA + "Voxel" + ChatColor.LIGHT_PURPLE + "Update" + ChatColor.WHITE + "] Successfully downloaded \"" + ChatColor.GREEN + trimmedArgs[0] + ChatColor.WHITE + "\"");
                         } else {
                             p.sendMessage(ChatColor.RED + "Download failed. See server logs for details.");
@@ -158,7 +158,7 @@ public class VoxelUpdate extends JavaPlugin {
                 return true;
             } else if (comm.equalsIgnoreCase("voxelinfo")) {
                 for (String tempplugin : voxelplugins) {
-                    p.sendMessage(tempplugin + ": " + um.get(tempplugin, "description"));
+                    p.sendMessage(tempplugin + ": " + updateManager.get(tempplugin, "description"));
                 }
                 return true;
             }

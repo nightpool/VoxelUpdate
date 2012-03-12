@@ -92,25 +92,24 @@ public class VoxelUpdate extends JavaPlugin {
         if (admns.contains(p.getName())) {
             if (comm.equalsIgnoreCase("voxelplugins")) {
                 p.sendMessage(ChatColor.WHITE + "[" + ChatColor.AQUA + "Voxel" + ChatColor.LIGHT_PURPLE + "Update" + ChatColor.WHITE + "] - Plugin List");
-                for (String tempplugin : voxelplugins) {
-                    boolean tempenabled = s.getPluginManager().isPluginEnabled(tempplugin);
-                    boolean tempinstalled = updateManager.isInstalled(tempplugin);
+                for (String plugin : voxelplugins) {
+                    boolean isEnabled = s.getPluginManager().isPluginEnabled(plugin);
+                    boolean isInstalled = updateManager.isInstalled(plugin);
 
-                    if (tempinstalled) {
-                        if (tempenabled) {
+                    if (isInstalled) {
+                        if (isEnabled) {
 
-                            if (updateManager.needsUpdate(tempplugin)) {
-                                p.sendMessage("* " + tempplugin + ": " + ChatColor.GOLD + "Update Available");
-
+                            if (updateManager.needsUpdate(plugin)) {
+                                p.sendMessage("* " + plugin + ": " + ((updateManager.isBeta(plugin)) ? ("\u00a76Beta available \u00a7c[WARNING: Potentially buggy]") : ("\u00a76Update available")));
                             } else {
-                                p.sendMessage("* " + tempplugin + ": " + ChatColor.GREEN + "Installed");
+                                p.sendMessage("* " + plugin + ": " + ChatColor.GREEN + "Installed");
                             }
 
                         } else {
-                            p.sendMessage("* " + tempplugin + ": " + ChatColor.GRAY + "Disabled");
+                            p.sendMessage("* " + plugin + ": " + ChatColor.GRAY + "Disabled");
                         }
                     } else {
-                        p.sendMessage("* " + tempplugin + ": " + ChatColor.RED + "Available");
+                        p.sendMessage("* " + plugin + ": " + ChatColor.RED + "Available");
                     }
                 }
                 return true;
@@ -244,7 +243,7 @@ public class VoxelUpdate extends JavaPlugin {
             props.setProperty("url", url);
             props.setProperty("auto-update", ((Boolean) autoUpdate).toString());
             props.setProperty("search-for-updates", ((Boolean) searchForUpdates).toString());
-            props.setProperty("announce-beta-buils", ((Boolean) announceBetaBuilds).toString());
+            props.setProperty("announce-beta-builds", ((Boolean) announceBetaBuilds).toString());
             props.store(fo, null);
         } catch (IOException e) {
             log.log(Level.WARNING, "[VoxelUpdate] Could not write preferences", e);

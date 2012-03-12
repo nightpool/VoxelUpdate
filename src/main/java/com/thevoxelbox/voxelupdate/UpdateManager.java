@@ -126,6 +126,13 @@ public class UpdateManager {
 
         return installtemp;
     }
+    
+    public boolean isBeta(String update) {
+        if (System.currentTimeMillis() - lastDataFetch > 60000)
+            readData();
+        
+        return get(update, "version").contains("-b");
+    }
 
     public boolean doDownload(String plugin) {
         boolean downloaded = false;

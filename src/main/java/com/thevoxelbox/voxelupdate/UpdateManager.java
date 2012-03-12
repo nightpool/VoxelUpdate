@@ -52,6 +52,17 @@ public class UpdateManager {
                 
                 // @BEGIN version parse
                 if (version.contains(".")) {
+                    if (VoxelUpdate.announceBetaBuilds && version.contains("-b")) {
+                        if (!plvers.contains("-b"))
+                            return true;
+                        else {
+                            int vrs   = Integer.parseInt(version.split("-b")[1]);
+                            int plvrs = Integer.parseInt(plvers.split("-b")[1]);
+                            
+                            return vrs > plvrs;
+                        }
+                    }
+                    
                     String[] nums = version.split("\\.");
                     String[] plnums = plvers.split("\\.");
                     

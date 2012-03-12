@@ -26,13 +26,11 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author psanker & giltwist
  */
 public class VoxelUpdate extends JavaPlugin {
-
-    // http://dl.dropbox.com/u/53561471/VoxelUpdate.xml <-- Official copy
-    public static VoxelUpdate me;
     public static Server s;
     public static String url = "http://dl.dropbox.com/u/53561471/VoxelUpdate.xml";
     public static boolean autoUpdate = false;
     public static boolean searchForUpdates = true;
+    public static boolean announceBetaBuilds = true;
     public File preferences = new File("plugins/VoxelUpdate/VoxelUpdate.properties");
     public static final Logger log = Logger.getLogger("Minecraft");
     public static List<String> admns = new LinkedList<String>();
@@ -65,18 +63,14 @@ public class VoxelUpdate extends JavaPlugin {
                 } catch (IOException e) {
                     log.log(Level.SEVERE, "[VoxelUpdate] Error copying files from VoxelUpdate/Downloads", e);
                 }
-                dl.delete();
             }
 
-            if (dldir.list().length == 0) {
-                dldir.delete();
-            }
+            dldir.delete();
         }
     }
 
     @Override
     public void onEnable() {
-        me = this;
         s = this.getServer();
         readPreferences();
         readAdmins();
@@ -99,8 +93,6 @@ public class VoxelUpdate extends JavaPlugin {
             if (comm.equalsIgnoreCase("voxelplugins")) {
                 p.sendMessage(ChatColor.WHITE + "[" + ChatColor.AQUA + "Voxel" + ChatColor.LIGHT_PURPLE + "Update" + ChatColor.WHITE + "] - Plugin List");
                 for (String tempplugin : voxelplugins) {
-
-                    //p.sendMessage("DEBUG: "+tempplugin); //DEBUG
                     boolean tempenabled = s.getPluginManager().isPluginEnabled(tempplugin);
                     boolean tempinstalled = updateManager.isInstalled(tempplugin);
 
@@ -125,7 +117,7 @@ public class VoxelUpdate extends JavaPlugin {
             } else if (comm.equalsIgnoreCase("voxelinstall")) {
                 if (args.length == 0) {
                     p.sendMessage(ChatColor.GOLD + "Use: /voxelinstall <plugin>");
-                } else { // Test case... Perhaps allow multiple plugins ("/voxelinstall plugin1 plugin2 pluginn")?
+                } else {
                     if (!updateManager.getListofPlugins().contains(trimmedArgs[0])) {
                         p.sendMessage(ChatColor.RED + "Could not find plugin \"" + trimmedArgs[0] + "\"");
                         return true;
@@ -158,7 +150,7 @@ public class VoxelUpdate extends JavaPlugin {
                 return true;
             } else if (comm.equalsIgnoreCase("voxelinfo")) {
                 for (String tempplugin : voxelplugins) {
-                    p.sendMessage(tempplugin + ": " + updateManager.get(tempplugin, "description"));
+                    p.sendMessage(tempplugin + ": \u00a7a" + updateManager.get(tempplugin, "description"));
                 }
                 return true;
             }
@@ -216,6 +208,9 @@ public class VoxelUpdate extends JavaPlugin {
                 if (map.containsKey("search-for-updates")) {
                     searchForUpdates = Boolean.parseBoolean(map.get("search-for-updates").toString());
                 }
+                if (map.containsKey("announce-beta-builds")) {
+                    announceBetaBuilds = Boolean.parseBoolean(map.get("announce-beta-builds").toString());
+                }
             }
 
         } catch (IOException e) {
@@ -226,7 +221,7 @@ public class VoxelUpdate extends JavaPlugin {
                     fi.close();
                 }
             } catch (IOException e) {
-                log.log(Level.SEVERE, "[VoxelUpdate] Fatal error while attempt to close an FIS", e);
+                log.log(Level.SEVERE, "[VoxelUpdate] Fatal error while attempting to close an FIS", e);
             }
         }
     }
@@ -249,6 +244,7 @@ public class VoxelUpdate extends JavaPlugin {
             props.setProperty("url", url);
             props.setProperty("auto-update", ((Boolean) autoUpdate).toString());
             props.setProperty("search-for-updates", ((Boolean) searchForUpdates).toString());
+            props.setProperty("announce-beta-buils", ((Boolean) announceBetaBuilds).toString());
             props.store(fo, null);
         } catch (IOException e) {
             log.log(Level.WARNING, "[VoxelUpdate] Could not write preferences", e);
@@ -258,7 +254,7 @@ public class VoxelUpdate extends JavaPlugin {
                     fo.close();
                 }
             } catch (IOException e) {
-                log.log(Level.WARNING, "[VoxelUpdate] Fatal error while attempt to close an FOS", e);
+                log.log(Level.WARNING, "[VoxelUpdate] Fatal error while attempting to close an FOS", e);
             }
         }
     }

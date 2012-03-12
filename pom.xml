@@ -4,7 +4,7 @@
 
   <groupId>com.thevoxelbox</groupId>
   <artifactId>VoxelUpdate</artifactId>
-  <version>1.0.14</version>
+  <version>1.1.0</version>
   <packaging>jar</packaging>
   <name>VoxelUpdate</name>
   <description>Update your VoxelPlugins from in-game!</description>

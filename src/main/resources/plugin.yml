@@ -1,7 +1,7 @@
 name: VoxelUpdate
-version: 1.0.14
+version: 1.1.0
 website: http://voxelwiki.com
-author: Psanker & Giltwist
+author: psanker & Giltwist
 main: com.thevoxelbox.voxelupdate.VoxelUpdate
 commands:
   voxelplugins:

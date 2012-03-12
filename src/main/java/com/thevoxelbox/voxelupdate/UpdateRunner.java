@@ -27,7 +27,7 @@ public class UpdateRunner implements Runnable {
                 if (VoxelUpdate.updateManager.needsUpdate(plugin.getDescription().getName())) {
                     for (Player p : VoxelUpdate.s.getOnlinePlayers()) {
                         if (VoxelUpdate.admns.contains(p.getName()) && !messaged.contains(plugin.getDescription().getName())) {
-                            p.sendMessage("[" + ChatColor.AQUA + "Voxel" + ChatColor.LIGHT_PURPLE + "Update" + ChatColor.WHITE +"]: There is an update available for \"" + ChatColor.GREEN + plugin.getDescription().getName() + ChatColor.WHITE + "\"");
+                            p.sendMessage("[" + ChatColor.AQUA + "Voxel" + ChatColor.LIGHT_PURPLE + "Update" + ChatColor.WHITE +"]: There is " + ((VoxelUpdate.updateManager.isBeta(plugin.getDescription().getName())) ? "\u00a7ca beta build\u00a7f" : "an update") + " available for \"" + ChatColor.GREEN + plugin.getDescription().getName() + ChatColor.WHITE + "\"");
                             p.sendMessage("[" + ChatColor.AQUA + "Voxel" + ChatColor.LIGHT_PURPLE + "Update" + ChatColor.WHITE +"]: Do " + ChatColor.AQUA + "/voxelupdate " + plugin.getDescription().getName() + ChatColor.WHITE + " to update!");
                             messaged.add(plugin.getDescription().getName());
                         }

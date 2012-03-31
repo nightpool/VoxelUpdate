@@ -18,6 +18,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -84,14 +86,13 @@ public class VoxelUpdate extends JavaPlugin {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
-        Player p = (Player) sender;
         String[] trimmedArgs = args;
         List<String> voxelplugins = updateManager.getListofPlugins();
 
         String comm = command.getName().toLowerCase();
-        if (admns.contains(p.getName())) {
+        if (admns.contains(sender.getName()) || sender instanceof ConsoleCommandSender || sender instanceof RemoteConsoleCommandSender) {
             if (comm.equalsIgnoreCase("voxelplugins")) {
-                p.sendMessage(ChatColor.WHITE + "[" + ChatColor.AQUA + "Voxel" + ChatColor.LIGHT_PURPLE + "Update" + ChatColor.WHITE + "] - Plugin List");
+                sender.sendMessage(ChatColor.WHITE + "[" + ChatColor.AQUA + "Voxel" + ChatColor.LIGHT_PURPLE + "Update" + ChatColor.WHITE + "] - Plugin List");
                 for (String plugin : voxelplugins) {
                     boolean isEnabled = s.getPluginManager().isPluginEnabled(plugin);
                     boolean isInstalled = updateManager.isInstalled(plugin);
@@ -100,56 +101,56 @@ public class VoxelUpdate extends JavaPlugin {
                         if (isEnabled) {
 
                             if (updateManager.needsUpdate(plugin)) {
-                                p.sendMessage("* " + plugin + ": " + ((updateManager.isBeta(plugin)) ? ("\u00a76Beta available \u00a7c[WARNING: Potentially buggy]") : ("\u00a76Update available")));
+                                sender.sendMessage("* " + plugin + ": " + ((updateManager.isBeta(plugin)) ? ("\u00a76Beta available \u00a7c[WARNING: Potentially buggy]") : ("\u00a76Update available")));
                             } else {
-                                p.sendMessage("* " + plugin + ": " + ChatColor.GREEN + "Installed");
+                                sender.sendMessage("* " + plugin + ": " + ChatColor.GREEN + "Installed");
                             }
 
                         } else {
-                            p.sendMessage("* " + plugin + ": " + ChatColor.GRAY + "Disabled");
+                            sender.sendMessage("* " + plugin + ": " + ChatColor.GRAY + "Disabled");
                         }
                     } else {
-                        p.sendMessage("* " + plugin + ": " + ChatColor.RED + "Available");
+                        sender.sendMessage("* " + plugin + ": " + ChatColor.RED + "Available");
                     }
                 }
                 return true;
             } else if (comm.equalsIgnoreCase("voxelinstall")) {
                 if (args.length == 0) {
-                    p.sendMessage(ChatColor.GOLD + "Use: /voxelinstall <plugin>");
+                    sender.sendMessage(ChatColor.GOLD + "Use: /voxelinstall <plugin>");
                 } else {
                     if (!updateManager.getListofPlugins().contains(trimmedArgs[0])) {
-                        p.sendMessage(ChatColor.RED + "Could not find plugin \"" + trimmedArgs[0] + "\"");
+                        sender.sendMessage(ChatColor.RED + "Could not find plugin \"" + trimmedArgs[0] + "\"");
                         return true;
                     }
 
                     if (updateManager.doDownload(trimmedArgs[0])) {
-                        p.sendMessage(ChatColor.WHITE + "[" + ChatColor.AQUA + "Voxel" + ChatColor.LIGHT_PURPLE + "Update" + ChatColor.WHITE + "] Successfully downloaded \"" + ChatColor.GREEN + trimmedArgs[0] + ChatColor.WHITE + "\"");
+                        sender.sendMessage(ChatColor.WHITE + "[" + ChatColor.AQUA + "Voxel" + ChatColor.LIGHT_PURPLE + "Update" + ChatColor.WHITE + "] Successfully downloaded \"" + ChatColor.GREEN + trimmedArgs[0] + ChatColor.WHITE + "\"");
                     } else {
-                        p.sendMessage(ChatColor.RED + "Download failed. See server logs for details.");
+                        sender.sendMessage(ChatColor.RED + "Download failed. See server logs for details.");
                     }
                 }
                 return true;
             } else if (comm.equalsIgnoreCase("voxelupdate")) {
                 if (args.length == 0) {
-                    p.sendMessage(ChatColor.GOLD + "Use: /voxelupdate <plugin>");
+                    sender.sendMessage(ChatColor.GOLD + "Use: /voxelupdate <plugin>");
                 } else {
                     if (!updateManager.getListofPlugins().contains(trimmedArgs[0])) {
-                        p.sendMessage(ChatColor.RED + "Could not find plugin \"" + trimmedArgs[0] + "\"");
+                        sender.sendMessage(ChatColor.RED + "Could not find plugin \"" + trimmedArgs[0] + "\"");
                         return true;
                     }
 
                     if (updateManager.needsUpdate(trimmedArgs[0])) {
                         if (updateManager.doDownload(trimmedArgs[0])) {
-                            p.sendMessage(ChatColor.WHITE + "[" + ChatColor.AQUA + "Voxel" + ChatColor.LIGHT_PURPLE + "Update" + ChatColor.WHITE + "] Successfully downloaded \"" + ChatColor.GREEN + trimmedArgs[0] + ChatColor.WHITE + "\"");
+                            sender.sendMessage(ChatColor.WHITE + "[" + ChatColor.AQUA + "Voxel" + ChatColor.LIGHT_PURPLE + "Update" + ChatColor.WHITE + "] Successfully downloaded \"" + ChatColor.GREEN + trimmedArgs[0] + ChatColor.WHITE + "\"");
                         } else {
-                            p.sendMessage(ChatColor.RED + "Download failed. See server logs for details.");
+                            sender.sendMessage(ChatColor.RED + "Download failed. See server logs for details.");
                         }
                     }
                 }
                 return true;
             } else if (comm.equalsIgnoreCase("voxelinfo")) {
                 for (String tempplugin : voxelplugins) {
-                    p.sendMessage(tempplugin + ": \u00a7a" + updateManager.get(tempplugin, "description"));
+                    sender.sendMessage(tempplugin + ": \u00a7a" + updateManager.get(tempplugin, "description"));
                 }
                 return true;
             }
